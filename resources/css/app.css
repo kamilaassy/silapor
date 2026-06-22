@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+    --font-display: "Fraunces", serif;
+    --font-sans: "Inter", sans-serif;
+
+    --color-cream: #F6F2E9;
+    --color-ink: #2A2620;
+
+    --color-moss: #4A6B4D;
+    --color-moss-dark: #3A5440;
+
+    --color-clay: #C2682F;
+    --color-clay-dark: #A0531F;
+
+    --color-rust: #9C3B2E;
+
+    --color-stone-50: #FAF8F4;
+    --color-stone-100: #F1EDE3;
+    --color-stone-200: #E3DDCE;
+    --color-stone-300: #CFC6B0;
+    --color-stone-400: #A89E87;
+    --color-stone-500: #827A68;
+    --color-stone-600: #5F594C;
+    --color-stone-700: #494438;
+    --color-stone-800: #332F27;
+    --color-stone-900: #211E18;
+}
+
+/* Smooth scroll & sane focus rings, sesuai prinsip aksesibilitas */
+html {
+    scroll-behavior: smooth;
+}
+
+*:focus-visible {
+    outline: 2px solid var(--color-clay);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Leaflet marker custom popup styling, dipakai di halaman peta */
+.leaflet-popup-content-wrapper {
+    border-radius: 0.75rem;
+    font-family: "Inter", sans-serif;
+}

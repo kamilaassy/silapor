@@ -1,58 +1,142 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SiLapor — Sistem Pelaporan Isu Lingkungan Perkotaan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-13.x-FF2D20?style=flat&logo=laravel)
+![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?style=flat&logo=php)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.x-06B6D4?style=flat&logo=tailwindcss)
 
-## About Laravel
+SiLapor adalah aplikasi web pelaporan isu lingkungan perkotaan berbasis Laravel yang memungkinkan warga untuk melaporkan masalah seperti tumpukan sampah liar, jalan berlubang, fasilitas umum rusak, dan lainnya kepada pemerintah/petugas setempat secara digital.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplikasi ini terinspirasi dari platform LAPOR! milik pemerintah Indonesia.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 👤 Identitas Pembuat
 
-## Learning Laravel
+| Nama | Lailatul Kamila As Syawwaliyah |
+|---|---|
+| NRP | 31124006 |
+| Program Studi | Informatika |
+| Universitas | Universitas Widya Kartika Surabaya (UWIKA) |
+| Mata Kuliah | Pemrograman Web (UAS) |
+| Tahun | 2026 |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🌟 Fitur Utama
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Multi-role Sistem
+- **Warga** — Membuat laporan, memantau progres, melihat peta publik
+- **Petugas** — Mengelola laporan masuk, update status, melihat semua pin di peta
+- **Admin** — Manajemen pengguna, kategori, status, dan statistik sistem
 
-## Agentic Development
+### 📸 Camera Access & Image Upload
+- Upload foto langsung dari kamera HP atau galeri
+- Maksimal 5 foto per laporan
+- Drag & drop support
+- Filter efek foto (Normal, Kontras, Grayscale, Cerah)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 🖼️ Image Processing
+- Kompresi otomatis menggunakan Intervention Image
+- Generate thumbnail 400x400px
+- Watermark & resize otomatis di server
+
+### 🗺️ GPS & Peta Interaktif
+- Deteksi lokasi otomatis via GPS browser
+- Klik/drag marker untuk tentukan lokasi manual
+- Peta interaktif dengan Leaflet.js + OpenStreetMap
+- Cluster marker untuk tampilan petugas
+- Reverse geocoding alamat otomatis via Nominatim
+
+### 🔍 Smart Search & Filtering
+- Pencarian berdasarkan judul, deskripsi, alamat
+- Filter berdasarkan status, kategori, kecamatan
+- Laravel Scout dengan database driver
+
+### 🌤️ API Integration
+- **OpenWeatherMap API** — Widget cuaca realtime saat membuat laporan
+- **Nominatim (OpenStreetMap)** — Reverse geocoding koordinat ke alamat
+
+### 📱 Responsive UI
+- Dibangun dengan Tailwind CSS
+- Mobile-first design
+- Sidebar dengan hamburger menu di mobile
+- Kompatibel di semua ukuran layar
+
+### ☁️ Cloud Hosting
+- Deploy di Railway.app
+- Database MySQL di cloud
+- Auto-deploy dari GitHub
+
+### 📧 Automated Email
+- Notifikasi email otomatis via Brevo (SMTP)
+- Email terkirim setiap kali status laporan diperbarui petugas
+- Template email HTML yang rapi
+
+---
+
+## 🛠️ Tech Stack
+
+| Komponen | Teknologi |
+|---|---|
+| Framework | Laravel 13 (PHP 8.5) |
+| Frontend | Tailwind CSS + Alpine.js |
+| Database | MySQL |
+| Auth & Role | Laravel Breeze + Spatie Permission |
+| Peta | Leaflet.js + OpenStreetMap |
+| Image Processing | Intervention Image v3 |
+| Email | Laravel Mail + Brevo |
+| Search | Laravel Scout (Database Driver) |
+| Hosting | Railway.app |
+| API | OpenWeatherMap + Nominatim |
+
+---
+
+## 🚀 Cara Menjalankan Lokal
 
 ```bash
-composer require laravel/boost --dev
+# Clone repository
+git clone https://github.com/USERNAME/silapor.git
+cd silapor
 
-php artisan boost:install
+# Install dependencies
+composer install
+npm install
+
+# Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# Isi konfigurasi database di .env, lalu:
+php artisan migrate --seed
+
+# Build assets
+npm run build
+
+# Jalankan server
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Akun Default (setelah seeding)
 
-## Contributing
+| Email | Password | Role |
+|---|---|---|
+| admin@silapor.test | password | Admin |
+| petugas@silapor.test | password | Petugas |
+| warga@silapor.test | password | Warga |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 📋 Status Laporan
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Status | Keterangan |
+|---|---|
+| 🔵 Baru Masuk | Laporan baru diterima sistem |
+| 🟡 Diverifikasi | Laporan telah diverifikasi petugas |
+| 🟠 Petugas ke Lapangan | Petugas sedang menuju lokasi |
+| 🟣 Dalam Proses | Penanganan sedang berlangsung |
+| 🟢 Selesai | Masalah telah diselesaikan |
+| 🔴 Ditolak | Laporan tidak valid atau duplikat |
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+© 2026 SiLapor — Tugas UAS Pemrograman Web, Universitas Widya Kartika Surabaya

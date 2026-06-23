@@ -32,19 +32,17 @@ Aplikasi ini terinspirasi dari platform LAPOR! milik pemerintah Indonesia.
 ### 📸 Camera Access & Image Upload
 - Upload foto langsung dari kamera HP atau galeri
 - Maksimal 5 foto per laporan
-- Drag & drop support
 
 ### 🖼️ Image Processing
 - Kompresi otomatis menggunakan Intervention Image
 - Generate thumbnail 400x400px
-- Watermark & resize otomatis di server
+- Resize otomatis di server
 
 ### 🗺️ GPS & Peta Interaktif
 - Deteksi lokasi otomatis via GPS browser
 - Klik/drag marker untuk tentukan lokasi manual
 - Peta interaktif dengan Leaflet.js + OpenStreetMap
 - Cluster marker untuk tampilan petugas
-- Reverse geocoding alamat otomatis via Nominatim
 
 ### 🔍 Smart Search & Filtering
 - Pencarian berdasarkan judul, deskripsi, alamat

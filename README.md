@@ -33,7 +33,6 @@ Aplikasi ini terinspirasi dari platform LAPOR! milik pemerintah Indonesia.
 - Upload foto langsung dari kamera HP atau galeri
 - Maksimal 5 foto per laporan
 - Drag & drop support
-- Filter efek foto (Normal, Kontras, Grayscale, Cerah)
 
 ### 🖼️ Image Processing
 - Kompresi otomatis menggunakan Intervention Image

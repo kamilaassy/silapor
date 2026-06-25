@@ -73,4 +73,9 @@ class ImageService
 
         return $data;
     }
+
+    public function delete($report): void
+    {
+        $this->deleteReportImages($report->id);
+    }
 }

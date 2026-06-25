@@ -60,6 +60,17 @@ class ImageService
 
     public function storeForReport($report, UploadedFile $file, int $order = 0): array
     {
-        return $this->processReportImage($file, $report->id);
+        $data = $this->processReportImage($file, $report->id);
+        
+        \App\Models\ReportImage::create([
+            'report_id'      => $report->id,
+            'path'           => $data['path_original'] ?? $data['path'],
+            'thumbnail_path' => $data['path_thumbnail'] ?? $data['thumbnail_path'],
+            'size_kb'        => $data['size_kb'],
+            'original_name'  => $data['original_name'],
+            'order'          => $order,
+        ]);
+
+        return $data;
     }
 }

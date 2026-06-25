@@ -87,7 +87,7 @@
                     if (this.filterStatus) params.append('status', this.filterStatus);
 
                     try {
-                        const res = await fetch(`{{ route('map.data') }}?${params.toString()}`);
+                        const res = await fetch(`/peta/data?${params.toString()}`);
                         const data = await res.json();
                         this.reports = data;
                         this.renderMarkers(data);

@@ -46,8 +46,8 @@ class ImageService
         $sizeKb = (int) (Storage::disk('public')->size($originalPath) / 1024);
 
         return [
-            'path_original'  => $originalPath,
-            'path_thumbnail' => $thumbPath,
+            'path'           => $originalPath,
+            'thumbnail_path' => $thumbPath,
             'size_kb'        => $sizeKb,
             'original_name'  => $file->getClientOriginalName(),
         ];

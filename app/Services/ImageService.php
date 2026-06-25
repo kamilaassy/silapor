@@ -57,4 +57,9 @@ class ImageService
     {
         Storage::disk('public')->deleteDirectory("reports/{$reportId}");
     }
+
+    public function storeForReport($report, UploadedFile $file, int $order = 0): array
+    {
+        return $this->processReportImage($file, $report->id);
+    }
 }

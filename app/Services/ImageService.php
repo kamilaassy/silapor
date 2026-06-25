@@ -2,71 +2,59 @@
 
 namespace App\Services;
 
-use App\Models\Report;
-use App\Models\ReportImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Drivers\Gd\Encoders\JpegEncoder;
 
 class ImageService
 {
-    // Target ukuran setelah kompres (KB) — sesuai requirement "disimpan cuma beberapa KB"
-    private const MAX_WIDTH_DISPLAY  = 1280;
-    private const MAX_WIDTH_THUMB    = 320;
-    private const QUALITY_DISPLAY    = 70;
-    private const QUALITY_THUMB      = 60;
-
-    private ImageManager $manager;
-
-    public function __construct()
+    public function processReportImage(UploadedFile $file, int $reportId): array
     {
-        // Pakai driver GD bawaan PHP — argumen harus nama class lengkap (string)
-        $this->manager = new ImageManager(Driver::class);
-    }
+        $folder   = "reports/{$reportId}";
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-    public function storeForReport(Report $report, UploadedFile $file, int $order = 0): ReportImage
-    {
-        $filename = Str::uuid() . '.jpg'; // selalu simpan sebagai jpg untuk konsistensi kompresi
+        $originalPath = "{$folder}/original/{$filename}";
+        $thumbPath    = "{$folder}/thumb/{$filename}";
 
-        $displayPath   = "reports/{$report->id}/{$filename}";
-        $thumbnailPath = "reports/{$report->id}/thumb_{$filename}";
+        // Simpan file langsung tanpa processing kalau GD tidak tersedia
+        Storage::disk('public')->putFileAs("{$folder}/original", $file, $filename);
+        Storage::disk('public')->putFileAs("{$folder}/thumb", $file, $filename);
 
-        // Baca gambar asli
-        $image = $this->manager->decode($file->getRealPath());
+        // Coba proses dengan Intervention Image kalau tersedia
+        try {
+            if (extension_loaded('gd')) {
+                $manager = new \Intervention\Image\ImageManager(
+                    new \Intervention\Image\Drivers\Gd\Driver()
+                );
 
-        // ---- Versi display (dikompres, max width 1280px) ----
-        $display = clone $image;
-        if ($display->width() > self::MAX_WIDTH_DISPLAY) {
-            $display->scale(width: self::MAX_WIDTH_DISPLAY);
+                $img = $manager->read($file->getRealPath())
+                    ->scaleDown(width: 1200, height: 1200)
+                    ->toJpeg(quality: 75);
+
+                Storage::disk('public')->put($originalPath, $img);
+
+                $thumb = $manager->read($file->getRealPath())
+                    ->cover(400, 400)
+                    ->toJpeg(quality: 70);
+
+                Storage::disk('public')->put($thumbPath, $thumb);
+            }
+        } catch (\Exception $e) {
+            // Fallback: file sudah tersimpan di atas
         }
-        $displayEncoded = $display->encode(new JpegEncoder(quality: self::QUALITY_DISPLAY));
-        Storage::disk('public')->put($displayPath, (string) $displayEncoded);
 
-        // ---- Versi thumbnail (kecil, untuk list/grid) ----
-        $thumb = clone $image;
-        $thumb->scale(width: self::MAX_WIDTH_THUMB);
-        $thumbEncoded = $thumb->encode(new JpegEncoder(quality: self::QUALITY_THUMB));
-        Storage::disk('public')->put($thumbnailPath, (string) $thumbEncoded);
+        $sizeKb = (int) (Storage::disk('public')->size($originalPath) / 1024);
 
-        $sizeKb = (int) round(strlen((string) $displayEncoded) / 1024);
-
-        return ReportImage::create([
-            'report_id'      => $report->id,
-            'path'           => $displayPath,
-            'thumbnail_path' => $thumbnailPath,
+        return [
+            'path_original'  => $originalPath,
+            'path_thumbnail' => $thumbPath,
             'size_kb'        => $sizeKb,
-            'width'          => $display->width(),
-            'height'         => $display->height(),
-            'order'          => $order,
-        ]);
+            'original_name'  => $file->getClientOriginalName(),
+        ];
     }
 
-    public function delete(ReportImage $image): void
+    public function deleteReportImages(int $reportId): void
     {
-        Storage::disk('public')->delete([$image->path, $image->thumbnail_path]);
-        $image->delete();
+        Storage::disk('public')->deleteDirectory("reports/{$reportId}");
     }
 }
